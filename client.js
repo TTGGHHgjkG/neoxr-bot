@@ -1,6 +1,6 @@
 "use strict";
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
-//process.on('uncaughtException', console.error)
+process.on('uncaughtException', console.error)
 require('events').EventEmitter.defaultMaxListeners = 500
 const { Baileys, MongoDB, PostgreSQL } = new(require('@neoxr/wb'))
 const Function = new (require('./lib/system/functions'))
@@ -14,6 +14,7 @@ const spinnies = new(require('spinnies'))(),
    axios = require('axios'),
    chalk = require('chalk'),
    express = require('express'),
+   { exec } = require('child_process'),
    app = express(),
    http = require('http'),
    sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -83,14 +84,36 @@ client.on('ready', async () => {
 
    runServer().then(() => runServer())
 
-   /* auto restart if ram usage is over */
-   const ramCheck = setInterval(() => {
-      var ramUsage = process.memoryUsage().rss
-      if (ramUsage >= require('bytes')(env.ram_limit)) {
-         clearInterval(ramCheck)
-         process.send('reset')
+   // Fungsi untuk merestart proses
+const restartProcess = () => {
+   process.send('reset', (error, stdout, stderr) => {
+      if (error) {
+         console.error(`Error restarting process: ${error.message}`);
+         return;
       }
-   }, 60 * 1000)
+      if (stderr) {
+         console.error(`stderr: ${stderr}`);
+         return;
+      }
+      console.log(`stdout: ${stdout}`);
+   });
+};
+
+/* auto restart if ram usage is over */
+const ramCheck = setInterval(() => {
+   var ramUsage = process.memoryUsage().rss
+   if (ramUsage >= require('bytes')(env.ram_limit)) {
+      clearInterval(ramCheck)
+      process.send('reset')
+   }
+}, 60 * 1000)
+
+// Interval untuk restart setiap 1 jam
+const hourlyRestart = setInterval(() => {
+   console.log('Restarting process every 1 hour...');
+   restartProcess(hourlyRestart);
+}, 60 * 60 * 1000); // 3,600,000 milliseconds = 1 hour
+
 
    /* create temp directory if doesn't exists */
    if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
@@ -155,7 +178,7 @@ client.on('presence.update', update => {
 
 client.on('group.add', async ctx => {
    const sock = client.sock
-   const text = `Thanks +tag for joining into +grup group.`
+   const text = `Selamat bergabung +tag di grup +grup.`
    const groupSet = global.db.groups.find(v => v.jid == ctx.jid)
    try {
       var pic = await Func.fetchBuffer(await sock.profilePictureUrl(ctx.member, 'image'))
@@ -182,7 +205,7 @@ client.on('group.add', async ctx => {
 
 client.on('group.remove', async ctx => {
    const sock = client.sock
-   const text = `Good bye +tag :)`
+   const text = `+tag Keluar.`
    const groupSet = global.db.groups.find(v => v.jid == ctx.jid)
    try {
       var pic = await Func.fetchBuffer(await sock.profilePictureUrl(ctx.member, 'image'))

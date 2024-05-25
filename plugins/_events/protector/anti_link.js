@@ -16,7 +16,7 @@ exports.run = {
                   id: m.key.id,
                   participant: m.sender
                }
-            }).then(() => client.groupParticipantsUpdate(m.chat, [m.sender], 'remove'))
+            })
          }
          
          // it only removes the link when antilink turned off
