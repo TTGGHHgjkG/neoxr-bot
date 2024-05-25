@@ -1,0 +1,172 @@
+const image = {
+            url: "https://mmg.whatsapp.net/o1/v/t62.7118-24/f1/m269/up-oil-image-f58c528d-ae9f-48e4-8b40-1c4e3f7721bf?ccb=9-4&oh=01_Q5AaICoMbL4iRuvGCxreuhRj8y7m7DETgXKngtX65Lay0G8y&oe=6656AF57&_nc_sid=000000&mms3=true",
+            mimetype: "image/jpeg",
+            fileSha256: "bW7OEYmSC4DXl34rO42v7K0544GbwyGuLCC+iu4i1T0=",
+            fileLength: "373972",
+            height: 2160,
+            width: 3840,
+            mediaKey: "OiA5dMB4D0od+TU+Ln2i+ohMxe8jR0C7/TowkLFgvKw=",
+            fileEncSha256: "M6L//W6N3C98wwAmBNtg2HYOBc57jp24Pr86xj7a8uk=",
+            directPath:
+              "/o1/v/t62.7118-24/f1/m269/up-oil-image-f58c528d-ae9f-48e4-8b40-1c4e3f7721bf?ccb=9-4&oh=01_Q5AaICoMbL4iRuvGCxreuhRj8y7m7DETgXKngtX65Lay0G8y&oe=6656AF57&_nc_sid=000000",
+            mediaKeyTimestamp: "1714377031",
+            jpegThumbnail:
+              "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2MBERISGBUYLxoaL2NCOEJjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY//AABEIABIAIAMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AOUknvpr2VIprh2LkAK5Petkrmbkoq7ZuaFpl59rEurPcRxLgrE8hQyE9B6gHB5xzg4qoxuzCrXUFdJv+u50ev2UupC3TTfMhRIpHKoAu9uNoOT7EZ5x/LGrFwV2dGFrwqN2Oeb+1dIvGs1keRHIHnMoYAcbiAx4xnHJwfyooyb2LxVOnNLnMCK/utO1GWezneGQOeVPUZzg+o46GrIIkN1eXWULyTMSxOefUkn9SadxaWOnl1e4+1WkEruEhEWFhfLTPkHIAGHyTkA+nUHOc5Pnd2TSg4w9123/AK/r0NXWru0kjLpFKlzaSFjlugYHcN3zA/xAD1XjpgxTjJ6G1RQkrSZ5/c/8fU3++f51uQWbR3jt5djFdy4bBxkZzg/iBSA6mYBdGiuAAJyI3Mo+8WBGDnrmspbnNd+2sbOknzdHW6k+e4aQoZm5cr6Z649qio9Dtw69+X9dEf/Z",
+          };
+
+
+
+
+
+
+
+const baileys = require("@adiwajshing/baileys")
+const { proto } = baileys
+
+const getUrl = (size, bg, fc, text) => `https://dummyimage.com/${size}/${bg}/${fc}/?text=${encodeURIComponent(text)}`
+async function createImage(size, bg, fc, text) {
+  const url = getUrl(size, bg, fc, text)
+  const { imageMessage } = await baileys.generateWAMessageContent({
+    image: {
+      url
+    }
+  }, {
+    upload: conn.waUploadToServer
+  })
+  return imageMessage
+}
+const random = (x) => x[Math.floor(Math.random() * x.length)]
+
+// [[size, bg, fc, text]]
+const _images = [
+  [
+    "512x512",
+    "000000",
+    "ffffff",
+    "This image is 512x512!"
+  ],
+  [
+    "1024x1024",
+    "000000",
+    "ffffff",
+    "This image is 1024x1024!"
+  ],
+  [
+    "1024x512",
+    "000000",
+    "ffffff",
+    "This image is 1024x512!"
+  ],
+  [
+    "512x1024",
+    "000000",
+    "ffffff",
+    "This image is 512x1024!"
+  ],
+  [
+    "1024x768",
+    "000000",
+    "ffffff",
+    "This image is 1024x768!"
+  ]
+]
+
+const msg = baileys.generateWAMessageFromContent(m.chat, {
+  viewOnceMessage: {
+    message: {
+      messageContextInfo: {
+        deviceListMetadata: {},
+        deviceListMetadataVersion: 2
+      },
+      interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+        body: proto.Message.InteractiveMessage.Body.fromObject({
+          text: "test"
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.fromObject({
+          text: "test"
+        }),
+        header: proto.Message.InteractiveMessage.Header.fromObject({
+          title: "test",
+          subtitle: "test"
+        }),
+        carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+          cards: _images.map(image => ({
+            body: proto.Message.InteractiveMessage.Body.fromObject({
+              text: `This image is ${image[3]}`
+            }),
+            footer: proto.Message.InteractiveMessage.Footer.fromObject({
+              text: `This image is ${image[3]}`
+            }),
+            header: proto.Message.InteractiveMessage.Header.fromObject({
+              title: `This image is ${image[3]}`,
+              hasMediaAttachment: true,
+              imageMessage: await createImage(...image)
+            }),
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+              buttons: [
+                {
+                  name: "quick_reply",
+                  buttonParamsJson: "{\"display_text\":\"quick_reply\",\"id\":\"message\"}"
+                },
+                {
+                  name: "cta_url",
+                  buttonParamsJson: {"display_text":"url","url":getUrl(...image),"merchant_url":getUrl(...image)}
+                },
+                {
+                  name: "cta_copy",
+                  buttonParamsJson: {"display_text":"copy","id":"123456789","copy_code":getUrl(...image)}
+                }
+              ]
+            })
+          }))
+        })
+      })
+    }
+  }
+}, {})
+
+await conn.relayMessage(msg.key.remoteJid, msg.message, {
+  messageId: msg.key.id
+})
+
+
+
+
+
+> const msg = require("@whiskeysockets/baileys").generateWAMessageFromContent(
+                m.chat,
+                { 
+                  imageMessage: {
+    interactiveAnnotations: [],
+    scanLengths: [],
+    annotations: [],
+    url: 'https://mmg.whatsapp.net/o1/v/t62.7118-24/f1/m232/up-oil-image-fa6a07f7-4b8a-46f1-9551-3bf8180e5338?ccb=9-4&oh=01_Q5AaIBf31nvuvbP_c6Y3CY8CgBEu0788TUbMzej-RIaKRJA8&oe=666E2599&_nc_sid=000000&mms3=true',
+    mimetype: 'image/jpeg',
+    fileSha256: <Buffer cf b4 94 5a b8 2d 95 63 c3 10 a5 f4 95 b3 8a 02 1f f9 a2 ed a0 5c 61 a9 10 3a 50 68 14 0f a5 69>,
+    fileLength: Long { low: 87301, high: 0, unsigned: true },
+    height: 500,
+    width: 500,
+    mediaKey: <Buffer 41 2b 3c 82 85 51 c8 e6 0e 46 dc 09 8c c5 a9 2e 41 60 d6 d6 68 41 17 35 c7 e1 44 cc e9 46 e3 e0>,
+    fileEncSha256: <Buffer 7e 24 e5 4b 7a 75 3d 10 0e 03 67 2a 0e 84 63 81 a1 6f 46 7f 23 e2 b8 81 2d 85 61 3c 67 27 63 97>,
+    directPath: '/o1/v/t62.7118-24/f1/m232/up-oil-image-fa6a07f7-4b8a-46f1-9551-3bf8180e5338?ccb=9-4&oh=01_Q5AaIBf31nvuvbP_c6Y3CY8CgBEu0788TUbMzej-RIaKRJA8&oe=666E2599&_nc_sid=000000',
+    mediaKeyTimestamp: Long { low: 1715908315, high: 0, unsigned: false },
+    jpegThumbnail: <Buffer ff d8 ff e0 00 10 4a 46 49 46 00 01 01 00 00 01 00 01 00 00 ff db 00 84 00 10 0b 0c 0e 0c 0a 10 0e 0d 0e 12 11 10 13 18 28 1a 18 16 16 18 31 23 25 1d ... 893 more bytes>
+  },
+                  interactiveMessage: {
+                    body: {
+                      text: 'tes'
+                    },
+                    footer: {
+                      text: "sᴛᴀᴛᴜs: ᴅᴏɴᴇ"
+                    },
+                    header: {
+                     title: 'tes'
+                    },
+                    nativeFlowMessage: {
+                      buttons: []
+                    },
+                  }
+                },
+                { quoted: m }
+              );
+            await client.relayMessage(m.chat, msg.message, {});

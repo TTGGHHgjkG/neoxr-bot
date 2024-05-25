@@ -1,0 +1,48 @@
+{
+   "name": "neoxr-bot",
+   "version": "4.0.0-rc",
+   "description": "WhatsApp Bot (Base)",
+   "main": "index.js",
+   "scripts": {
+      "start": "node ."
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/neoxr/wbot.git"
+   },
+   "keywords": [
+      "wb",
+      "bot"
+   ],
+   "author": "Wildan Izzudin",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/neoxr/wbot/issues"
+   },
+   "homepage": "https://github.com/neoxr/wbot#readme",
+   "dependencies": {
+      "@adiwajshing/baileys": "npm:@neoxr/baileys@6.7.2",
+      "@adiwajshing/keyed-db": "^0.2.4",
+      "@colors/colors": "^1.6.0",
+      "@google/generative-ai": "^0.7.1",
+      "@neoxr/wb": "^1.42.58",
+      "@whiskeysockets/baileys": "github:WhiskeySockets/Baileys",
+      "bytes": "^3.1.2",
+      "cfonts": "3.1.1",
+      "cjs": "^0.0.11",
+      "d-scrape": "^1.1.6",
+      "express": "~4.16.4",
+      "ffmpeg-static": "^4.4.0",
+      "insta-fetcher": "^1.3.35",
+      "jimp": "~0.16.13",
+      "json-stable-stringify": "^1.0.2",
+      "neofetch": "^7.1.0",
+      "node-cron": "^3.0.0",
+      "node-gtts": "^2.0.2",
+      "nodemailer": "^6.9.13",
+      "qrcode": "^1.5.0",
+      "speedtest-net": "1.6.2",
+      "streamifier": "^0.1.1",
+      "translate-google-api": "1.0.4"
+   }
+}
