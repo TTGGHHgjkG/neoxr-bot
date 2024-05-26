@@ -32,8 +32,8 @@ exports.run = {
             largeThumb: true,
             thumbnail: await Func.fetchBuffer(json.thumbnail)
          }).then(async () => {
-            await client.sendFile(m.chat, json.data.buffer, json.data.filename, caption, m, {
-               document: true
+            await client.sendDocument(m.chat, json.data.buffer, json.data.filename, caption, m, {
+               thumbail: await Func.fetchBuffer(json.thumbnail)
             })
          })
          client.sendFile(m.chat, json.data.buffer, json.data.filename, caption, m)
