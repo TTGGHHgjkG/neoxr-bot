@@ -36,7 +36,7 @@ module.exports = async (client, ctx) => {
       const blockList = typeof await (await client.fetchBlocklist()) != 'undefined' ? await (await client.fetchBlocklist()) : []
       const isSpam = spam.detection(client, m, {
          prefix, command, commands, users, cooldown,
-         show: 'all', // choose 'all' or 'command-only'
+         show: 'command-only', // choose 'all' or 'command-only'
          banned_times: users.ban_times,
          simple: false
       })

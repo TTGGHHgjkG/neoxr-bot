@@ -2,7 +2,7 @@
    "owner": "6281391337455",
    "owner_name": "Customer Support",
    "database": "data",
-   "limit": 25,
+   "limit": 35,
    "ram_limit": "900mb",
    "max_upload": 80,
    "max_upload_free": 30,
