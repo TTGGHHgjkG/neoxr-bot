@@ -1,72 +1,52 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose')
 
 module.exports = class MongoDB {
-   constructor(db, collection, options = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      ssl: true,
-      tlsAllowInvalidCertificates: false,
-      tlsAllowInvalidHostnames: false
-   }) {
-      this._id = 1;
-      this.db = db || 'database';
-      this.options = options;
-      this.client = new MongoClient(process.env.DATABASE_URL, this.options);
-      this.init();
-   }
-
-   async exec(collect) {
-      try {
-         await this.client.connect();
-         const db = await this.client.db(this.db).collection(collect);
-         return db;
-      } catch (e) {
-         console.error('Error connecting to MongoDB:', e);
-         process.exit(1);
+      options = {
+         useNewUrlParser: true,
+         useUnifiedTopology: true
       }
-   }
-
-   async fetch() {
-      try {
-         const collection = await this.exec('database');
-         const json = await collection.findOne({ _id: this._id });
-         if (!json) {
-            await collection.insertOne({ _id: this._id, data: {} });
-            return {};
-         } else {
-            return json.data;
+      connection = process.env.DATABASE_URL
+      model = {
+         database: {}
+      }
+      data = {}
+      
+      fetch = async () => {
+         mongoose.connect(this.connection, {
+            ...this.options
+         })
+         try {
+            const schemaData = new mongoose.Schema({
+               data: {
+                  type: Object,
+                  required: true,
+                  default: {}
+               }
+            })
+            this.model.database = mongoose.model('data', schemaData)
+         } catch {
+            this.model.database = mongoose.model('data')
          }
-      } catch (e) {
-         console.error('Error fetching data from MongoDB:', e);
-         process.exit(1);
+         this.data = await this.model.database.findOne({})
+         if (!this.data) {
+            (new this.model.database({
+               data: {}
+            })).save()
+            this.data = await this.model.database.findOne({})
+            return this.data.data
+         } else return this.data.data
       }
-   }
 
-   async save(data) {
-      try {
-         const collection = await this.exec('database');
-         const json = await collection.findOne({ _id: this._id });
-         const is_data = data || global.db || {};
-         if (!json) {
-            await collection.insertOne({ _id: this._id, data: is_data });
-         } else {
-            await collection.updateOne({ _id: this._id }, { $set: { data: is_data } });
-         }
-      } catch (e) {
-         console.error('Error saving data to MongoDB:', e);
-         process.exit(1);
+      save = async (data) => {
+         const obj = data ? data : global.db
+         if (this.data && !this.data.data) return (new this.model.database({
+            data: obj
+         })).save()
+         this.model.database.findById(this.data._id, (error, document) => {
+            if (error) return
+            if (!document.data) document.data = {}
+            document.data = global.db
+            document.save()
+         })
       }
    }
-
-   async init() {
-      try {
-         await this.client.connect();
-         const db = await this.client.db(this.db);
-         const collectionExists = await db.listCollections({ name: 'data' }).hasNext();
-         if (!collectionExists) await db.createCollection('data');
-      } catch (e) {
-         console.error('Error initializing MongoDB:', e);
-         process.exit(1);
-      }
-   }
-}
