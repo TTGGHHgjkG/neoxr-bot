@@ -14,7 +14,7 @@ exports.run = {
       if (isNaN(args[0])) return client.reply(m.chat, Func.example(isPrefix, command, '10000'), m)
       if (args[0] > users.point) return client.reply(m.chat, Func.texted('bold', `🚩 Pointmu tidak cukup untuk melakukan spin sebanyak ${Func.formatNumber(args[0])} point.`), m)
       if (args[0] < 1000) return client.reply(m.chat, Func.texted('bold', `🚩 Tidak bisa melakukan spin dengan nominal dibawah 1000 point.`), m)
-      if (args[0] > 5000000) return client.reply(m.chat, Func.texted('bold', `Sekarang batas point yg bisa di spin hanya mencapai 5 Juta Point.`), m)
+      if (args[0] > 500000000) return client.reply(m.chat, Func.texted('bold', `Sekarang batas point yg bisa di spin hanya mencapai 500 Juta Point.`), m)
       users.point -= args[0]
       let reward = Func.randomInt(100, args[0] * 3)
       users.point += reward
