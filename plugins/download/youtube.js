@@ -35,7 +35,7 @@ exports.run = {
                thumbnail: await Func.fetchBuffer(json.thumbnail)
             }).then(async () => {
                const buffer = await Converter.toAudio(json.data.buffer, 'mp3')
-               client.sendDocument(m.chat, buffer, json.data.filename, caption, m, {
+               client.sendDocument(m.chat, buffer, json.data.filename, m, {
                   thumbail: await Func.fetchBuffer(json.thumbnail)
                })
             })
@@ -59,7 +59,7 @@ exports.run = {
                largeThumb: true,
                thumbnail: await Func.fetchBuffer(json.thumbnail)
             }).then(async () => {
-               await client.sendDocument(m.chat, json.data.buffer, json.data.filename, caption, m, {
+               await client.sendDocument(m.chat, json.data.buffer, json.data.filename, m, {
                   thumbail: await Func.fetchBuffer(json.thumbnail)
                })
             })
