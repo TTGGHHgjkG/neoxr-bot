@@ -33,7 +33,9 @@ exports.run = {
             thumbnail: await Func.fetchBuffer(json.thumbnail)
          }).then(async () => {
             const buffer = await Converter.toAudio(json.data.buffer, 'mp3')
-            client.sendDocument(m.chat, buffer, json.data.filename, '', m)
+            client.sendDocument(m.chat, buffer, json.data.filename, m, {
+               thumbnail: await Func.fetchBuffer(json.thumbnail)
+            })
          })
       } catch (e) {
          console.log(e)
