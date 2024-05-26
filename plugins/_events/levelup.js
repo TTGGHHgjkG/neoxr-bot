@@ -3,7 +3,8 @@ exports.run = {
        client,
        users,
        body,
-       setting
+       setting,
+       Func
     }) => {
        try {
           let levelAwal = Func.level(users.point, global.multiplier)[0]
