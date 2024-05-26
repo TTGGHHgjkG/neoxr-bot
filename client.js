@@ -30,9 +30,9 @@ const machine = (process.env.DATABASE_URL && /mongo/.test(process.env.DATABASE_U
 const client = new Baileys({
    type: '--neoxr-v1',
    plugsdir: 'plugins',
-   sf: 'session',
+   sf: 'session-bot',
    online: true,
-   version: [2, 2329, 9]
+   version: [2, 2413, 51]
 })
 
 /* starting to connect */
