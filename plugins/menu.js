@@ -18,7 +18,7 @@ exports.run = {
          const id = m.chat
          const local_size = fs.existsSync('./' + env.database + '.json') ? await Func.getSize(fs.statSync('./' + env.database + '.json').size) : ''
          const library = JSON.parse(require('fs').readFileSync('./package.json', 'utf-8'))
-         textmenu = 'Silahkan pilih menu yg kamu inginkan disini:'
+         textmenu = 'Terima kasih telah menggunakan layanan kami, jika mengalami kendala pilih opsi Bantuan untuk menghubungi pusat bantuan.\n\nSilahkan pilih menu yg kamu inginkan disini:'
          const message = textmenu.replace('+tag', `@${m.sender.replace(/@.+/g, '')}`).replace('+downloadS', `*${Func.formatSize(global.db.setting.receiveSize)}*`).replace('+uploadS', `*${Func.formatSize(global.db.setting.uploadSize)}*`).replace('+name', `${Func.censorName(m.pushName)}`).replace('+greeting', Func.greeting()).replace('+db', (/mongo/.test(process.env.DATABASE_URL) ? 'Mongo' : /postgre/.test(process.env.DATABASE_URL) ? 'Postgres' : `Local (${local_size})`)).replace('^', '').replace('~', '')
          const style = setting.style
          if (style === 1) {
