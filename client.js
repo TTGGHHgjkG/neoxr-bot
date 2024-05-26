@@ -152,13 +152,13 @@ const hourlyRestart = setInterval(() => {
 client.on('message', ctx => require('./handler')(client.sock, ctx))
 
 /* print deleted message object */
-client.on('message.delete', ctx => {
-   const sock = client.sock  
-   if (!ctx || ctx.origin.fromMe || ctx.origin.isBot || !ctx.origin.sender) return
-   if (cache.has(ctx.origin.sender) && cache.get(ctx.origin.sender) === 1) return
-   cache.set(ctx.origin.sender, 1)
-   if (ctx.origin.isGroup && global.db.groups.some(v => v.jid == ctx.origin.chat) && global.db.groups.find(v => v.jid == ctx.origin.chat).antidelete) return sock.copyNForward(ctx.origin.chat, ctx.delete)
-})
+//client.on('message.delete', ctx => {
+//   const sock = client.sock  
+//   if (!ctx || ctx.origin.fromMe || ctx.origin.isBot || !ctx.origin.sender) return
+//   if (cache.has(ctx.origin.sender) && cache.get(ctx.origin.sender) === 1) return
+//   cache.set(ctx.origin.sender, 1)
+//   if (ctx.origin.isGroup && global.db.groups.some(v => v.jid == ctx.origin.chat) && global.db.groups.find(v => v.jid == ctx.origin.chat).antidelete) return sock.copyNForward(ctx.origin.chat, ctx.delete)
+//})
 
 /* AFK detector */
 client.on('presence.update', update => {
@@ -229,7 +229,8 @@ client.on('group.remove', async ctx => {
 
 client.on('caller', ctx => {
 	if (typeof ctx === 'boolean') return
-	client.sock.updateBlockStatus(ctx.jid, 'block')
+   sock.reply(m.chat, 'Jangan panggil bot!')
+	//client.sock.updateBlockStatus(ctx.jid, 'block')
 })
 
 // client.on('group.promote', ctx => console.log(ctx))

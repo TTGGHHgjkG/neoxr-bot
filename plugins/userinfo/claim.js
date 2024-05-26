@@ -11,6 +11,9 @@ exports.run = {
       let timeClaim = 3600000
       let claimed = new Date(user.lastclaim + timeClaim)
       let timeout = claimed - new Date()
+      if (!user) {
+         return client.reply(m.chat, 'Mencoba untuk mendaftarkan kamu ke database, ulangi lagi.', m)
+      }
       if (new Date - user.lastclaim > timeClaim) {
          client.reply(m.chat, `Selamat kamu mendapatkan point 5 Juta, dan 20 limit dari mengklaim`, m)
          user.point += 5000000
