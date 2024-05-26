@@ -2,7 +2,7 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 process.on('uncaughtException', console.error)
 require('events').EventEmitter.defaultMaxListeners = 500
-const { Baileys, MongoDB, PostgreSQL } = new(require('@neoxr/wb'))
+const { Baileys } = new(require('@neoxr/wb'))
 const Function = new (require('./lib/system/functions'))
 const Func = Function
 const spinnies = new(require('spinnies'))(),
@@ -23,6 +23,8 @@ const PORT = process.env.PORT || 8080
 const cache = new(require('node-cache'))({
    stdTTL: env.cooldown
 })
+const MongoDB = /mongo/.test(process.env.DATABASE_URL) && process.env.DATABASE_URL ? new (require('./system/mongo')) : false
+const PostgreSQL = /postgres/.test(process.env.DATABASE_URL) && process.env.DATABASE_URL ? new (require('./system/pg')) : false
 if (process.env.DATABASE_URL && /mongo/.test(process.env.DATABASE_URL)) MongoDB.db = env.database
 const machine = (process.env.DATABASE_URL && /mongo/.test(process.env.DATABASE_URL)) ? MongoDB : (process.env.DATABASE_URL && /postgres/.test(process.env.DATABASE_URL)) ? PostgreSQL : new(require('./lib/system/localdb'))(env.database)
 const client = new Baileys({

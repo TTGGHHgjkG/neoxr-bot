@@ -100,9 +100,6 @@ dist
 .tern-port
 
 # Ignored component
-session
-.env
-temp/
 data.*
 yarn.*
 package-lock.*
