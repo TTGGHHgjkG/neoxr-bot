@@ -23,9 +23,9 @@ module.exports = class MongoDB {
                   default: {}
                }
             })
-            this.model.database = mongoose.model('data', schemaData)
+            this.model.database = mongoose.model('database', schemaData)
          } catch {
-            this.model.database = mongoose.model('data')
+            this.model.database = mongoose.model('database')
          }
          this.data = await this.model.database.findOne({})
          if (!this.data) {
