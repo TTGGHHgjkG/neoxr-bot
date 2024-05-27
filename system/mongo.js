@@ -1,52 +1,107 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 module.exports = class MongoDB {
-      options = {
-         useNewUrlParser: true,
-         useUnifiedTopology: true
+   constructor(db, collection, options = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+   }) {
+      this._id = 1;
+      this.db = db || 'database';
+      this.options = options;
+      this.init();
+   }
+
+   connection = process.env.DATABASE_URL;
+
+   exec = async (collect) => {
+      try {
+         await mongoose.connect(this.connection, this.options);
+         const schema = new mongoose.Schema({
+            _id: {
+               type: Number,
+               required: true
+            },
+            data: {
+               type: Object,
+               required: true,
+               default: {}
+            }
+         });
+         const model = mongoose.models[collect] || mongoose.model(collect, schema);
+         return model;
+      } catch (e) {
+         console.log(`System restarted because your mongodb connection error . . .`);
+         process.exit(1);
       }
-      connection = process.env.DATABASE_URL
-      model = {
-         database: {}
+   }
+
+   fetch = async () => {
+      try {
+         const Model = await this.exec('data');
+         let json = await Model.findOne({ _id: this._id });
+         if (!json) {
+            await Model.create({
+               _id: this._id,
+               data: {}
+            });
+            return ({});
+         } else {
+            return json.data;
+         }
+      } catch (e) {
+         console.log(`System restarted because your mongodb connection error . . .`);
+         process.exit(1);
       }
-      data = {}
-      
-      fetch = async () => {
-         mongoose.connect(this.connection, {
-            ...this.options
-         })
-         try {
-            const schemaData = new mongoose.Schema({
+   }
+
+   save = async data => {
+      try {
+         const Model = await this.exec('data');
+         const is_data = data ? data : global.db ? global.db : {};
+         let json = await Model.findOne({ _id: this._id });
+         if (!json) {
+            await Model.create({
+               _id: this._id,
+               data: is_data
+            });
+         } else {
+            await Model.updateOne({
+               _id: this._id
+            }, {
+               '$set': {
+                  data: is_data
+               }
+            });
+         }
+      } catch (e) {
+         console.log(`System restarted because your mongodb connection error . . .`);
+         process.exit(1);
+      }
+   }
+
+   init = async () => {
+      try {
+         await mongoose.connect(this.connection, this.options);
+         const db = mongoose.connection.db;
+         const collections = await db.listCollections().toArray();
+         const collectionExists = collections.some(v => v.name === 'data');
+         if (!collectionExists) {
+            const schema = new mongoose.Schema({
+               _id: {
+                  type: Number,
+                  required: true
+               },
                data: {
                   type: Object,
                   required: true,
                   default: {}
                }
-            })
-            this.model.database = mongoose.model('database', schemaData)
-         } catch {
-            this.model.database = mongoose.model('database')
+            });
+            mongoose.model('data', schema);
          }
-         this.data = await this.model.database.findOne({})
-         if (!this.data) {
-            (new this.model.database({
-               data: {}
-            })).save()
-            this.data = await this.model.database.findOne({})
-            return this.data.data
-         } else return this.data.data
-      }
-
-      save = async (data) => {
-         const obj = data ? data : global.db
-         if (this.data && !this.data.data) return (new this.model.database({
-            data: obj
-         })).save()
-         this.model.database.findById(this.data._id, (error, document) => {
-            if (error) return
-            if (!document.data) document.data = {}
-            document.data = global.db
-            document.save()
-         })
+      } catch (e) {
+         console.log(`System restarted because your mongodb connection error . . .`);
+         process.exit(1);
       }
    }
+}
