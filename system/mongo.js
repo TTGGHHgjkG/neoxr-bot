@@ -16,6 +16,7 @@ module.exports = class MongoDB {
    exec = async (collect) => {
       try {
          await mongoose.connect(this.connection, this.options);
+         console.log('Connected to MongoDB');
          const schema = new mongoose.Schema({
             _id: {
                type: Number,
@@ -30,7 +31,7 @@ module.exports = class MongoDB {
          const model = mongoose.models[collect] || mongoose.model(collect, schema);
          return model;
       } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`);
+         console.error('Error connecting to MongoDB:', e.message);
          process.exit(1);
       }
    }
@@ -49,7 +50,7 @@ module.exports = class MongoDB {
             return json.data;
          }
       } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`);
+         console.error('Error fetching data:', e.message);
          process.exit(1);
       }
    }
@@ -74,7 +75,7 @@ module.exports = class MongoDB {
             });
          }
       } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`);
+         console.error('Error saving data:', e.message);
          process.exit(1);
       }
    }
@@ -100,7 +101,7 @@ module.exports = class MongoDB {
             mongoose.model('data', schema);
          }
       } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`);
+         console.error('Error during initialization:', e.message);
          process.exit(1);
       }
    }
