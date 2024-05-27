@@ -110,12 +110,11 @@ const ramCheck = setInterval(() => {
    }
 }, 60 * 1000)
 
-// Interval untuk restart setiap 1 jam
+// Interval untuk restart setiap 2 jam
 const hourlyRestart = setInterval(() => {
-   console.log('Restarting process every 1 hour...');
+   console.log('Restarting process every 2 hours...');
    restartProcess(hourlyRestart);
-}, 60 * 60 * 1000); // 3,600,000 milliseconds = 1 hour
-
+}, 2 * 60 * 60 * 1000); // 7,200,000 milliseconds = 2 hours
 
    /* create temp directory if doesn't exists */
    if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')

@@ -1,79 +1,52 @@
-const { MongoClient } = require('mongodb')
+const mongoose = require('mongoose')
 
 module.exports = class MongoDB {
-   constructor(db, collection, options = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-   }) {
-      this._id = 1
-      this.db = db || 'database'
-      this.options = options
-      this.init()
-   }
-
-   client = new MongoClient(process.env.DATABASE_URL, this.options)
-
-   exec = async (collect) => {
-      try {
-         await this.client.connect()
-         const db = await this.client.db(this.db).collection(collect)
-         return db
-      } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`)
-         process.exit(1)
+      options = {
+         useNewUrlParser: true,
+         useUnifiedTopology: true
       }
-   }
-
-   fetch = async () => {
-      try {
-         const json = await (await this.exec('database')).findOne({
-            _id: this._id
-         })
-         if (!json) {
-            await (await this.exec('database')).insertMany([{
-               _id: this._id,
-               data: {}
-            }])
-            return ({})
-         } else {
-            return json.data
-         }
-      } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`)
-         process.exit(1)
+      connection = process.env.DATABASE_URL
+      model = {
+         database: {}
       }
-   }
-
-   save = async data => {
-      try {
-         const json = await (await this.exec('database')).findOne({
-            _id: this._id
+      data = {}
+      
+      fetch = async () => {
+         mongoose.connect(this.connection, {
+            ...this.options
          })
-         const is_data = data ? data : global.db ? global.db : {}
-         if (!json) {
-            await (await this.exec('database')).insertMany([{
-               _id: this._id,
-               data: is_data
-            }])
-         } else {
-            const res = await (await this.exec('database')).updateOne({
-               _id: this._id
-            }, {
-               '$set': {
-                  data: is_data
+         try {
+            const schemaData = new mongoose.Schema({
+               data: {
+                  type: Object,
+                  required: true,
+                  default: {}
                }
             })
+            this.model.database = mongoose.model('data', schemaData)
+         } catch {
+            this.model.database = mongoose.model('data')
          }
-      } catch (e) {
-         console.log(`System restarted because your mongodb connection error . . .`)
-         process.exit(1)
+         this.data = await this.model.database.findOne({})
+         if (!this.data) {
+            (new this.model.database({
+               data: {}
+            })).save()
+            this.data = await this.model.database.findOne({})
+            return this.data.data
+         } else return this.data.data
+      }
+
+      save = async (data) => {
+         const obj = data ? data : global.db
+         if (this.data && !this.data.data) return (new this.model.database({
+            data: obj
+         })).save()
+         this.model.database.findById(this.data._id, (error, document) => {
+            if (error) return
+            if (!document.data) document.data = {}
+            document.data = global.db
+            document.save()
+         })
       }
    }
-
-   init = async () => {
-      await this.client.connect()
-      const db = await this.client.db(this.db)
-      const data = await (await db.listCollections().toArray()).some(v => v.name == 'data')
-      if (!data) db.createCollection('data')
-   }
-}
